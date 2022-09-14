@@ -4,7 +4,6 @@ var generateBtn = document.querySelector("#generate");
 //All characters on the keyboard
 var allCharacters = [];
 for (let i = 32; i < 127; i++) allCharacters.push(String.fromCharCode(i));
-console.log(allCharacters);
 
 //We start by breaking down the allCharacters array into the different types of characters it holds
 
@@ -31,7 +30,7 @@ function generatePassword() {
   if (!characterLength) {
     return;
   }
-
+  //Password criteria
   if (characterLength >= 8 && characterLength <= 128) {
     var isLower = window.confirm(
       `Would you like to include lower case characters?`
@@ -43,13 +42,15 @@ function generatePassword() {
     var isSpecial = window.confirm(
       `Would you like to include special characters?`
     );
-
+    //Sets password array to the specified length
     var password = [];
     password.length = characterLength;
+    //Gets a random number
     function getRandomIndex(arr) {
       var randomIndex = Math.floor(Math.random() * arr.length);
       return randomIndex;
     }
+    //All possible password criteria combinations in order
     if (isLower && isUpper && isNumber && isSpecial) {
       password[0] = lowerCharacters[getRandomIndex(lowerCharacters)];
       password[1] = upperCharacters[getRandomIndex(upperCharacters)];
@@ -157,7 +158,9 @@ function generatePassword() {
         password[i] = specialCharacters[getRandomIndex(specialCharacters)];
       }
     }
-    return password.toString().replaceAll(`,`, ``);
+    console.log(password);
+    //converts the passwork array into a string
+    return password.join("");
   } else {
     //So we can restart the function right away if the length of characters wasnt valid
     var restart = function () {
