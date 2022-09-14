@@ -45,20 +45,121 @@ function generatePassword() {
     );
 
     var password = [];
-
+    password.length = characterLength;
     function getRandomIndex(arr) {
       var randomIndex = Math.floor(Math.random() * arr.length);
       return randomIndex;
     }
-
-    if (isLower) {
+    if (isLower && isUpper && isNumber && isSpecial) {
+      password[0] = lowerCharacters[getRandomIndex(lowerCharacters)];
+      password[1] = upperCharacters[getRandomIndex(upperCharacters)];
+      password[2] = numericCharacters[getRandomIndex(numericCharacters)];
+      password[3] = specialCharacters[getRandomIndex(specialCharacters)];
+      for (let i = 4; i < characterLength; i++) {
+        password[i] = allCharacters[getRandomIndex(allCharacters)];
+      }
+    } else if (isUpper && isNumber && isSpecial) {
+      var mixedCharacters = upperCharacters.concat(
+        numericCharacters.concat(specialCharacters)
+      );
+      password[0] = upperCharacters[getRandomIndex(upperCharacters)];
+      password[1] = numericCharacters[getRandomIndex(numericCharacters)];
+      password[2] = specialCharacters[getRandomIndex(specialCharacters)];
+      for (let i = 3; i < characterLength; i++) {
+        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
+      }
+    } else if (isLower && isNumber && isSpecial) {
+      var mixedCharacters = lowerCharacters.concat(
+        numericCharacters.concat(specialCharacters)
+      );
+      password[0] = lowerCharacters[getRandomIndex(lowerCharacters)];
+      password[1] = numericCharacters[getRandomIndex(numericCharacters)];
+      password[2] = specialCharacters[getRandomIndex(specialCharacters)];
+      for (let i = 3; i < characterLength; i++) {
+        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
+      }
+    } else if (isLower && isUpper && isSpecial) {
+      var mixedCharacters = lowerCharacters.concat(
+        upperCharacters.concat(specialCharacters)
+      );
+      password[0] = lowerCharacters[getRandomIndex(lowerCharacters)];
+      password[1] = upperCharacters[getRandomIndex(upperCharacters)];
+      password[2] = specialCharacters[getRandomIndex(specialCharacters)];
+      for (let i = 3; i < characterLength; i++) {
+        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
+      }
+    } else if (isLower && isUpper && isNumber) {
+      var mixedCharacters = lowerCharacters.concat(
+        upperCharacters.concat(numericCharacters)
+      );
+      password[0] = lowerCharacters[getRandomIndex(lowerCharacters)];
+      password[1] = upperCharacters[getRandomIndex(upperCharacters)];
+      password[2] = numericCharacters[getRandomIndex(numericCharacters)];
+      for (let i = 3; i < characterLength; i++) {
+        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
+      }
+    } else if (isLower && isUpper) {
+      var mixedCharacters = lowerCharacters.concat(upperCharacters);
+      password[0] = lowerCharacters[getRandomIndex(lowerCharacters)];
+      password[1] = upperCharacters[getRandomIndex(upperCharacters)];
+      for (let i = 2; i < characterLength; i++) {
+        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
+      }
+    } else if (isLower && isNumber) {
+      var mixedCharacters = lowerCharacters.concat(numericCharacters);
+      password[0] = lowerCharacters[getRandomIndex(lowerCharacters)];
+      password[1] = numericCharacters[getRandomIndex(numericCharacters)];
+      for (let i = 2; i < characterLength; i++) {
+        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
+      }
+    } else if (isLower && isSpecial) {
+      var mixedCharacters = lowerCharacters.concat(specialCharacters);
+      password[0] = lowerCharacters[getRandomIndex(lowerCharacters)];
+      password[1] = specialCharacters[getRandomIndex(specialCharacters)];
+      for (let i = 2; i < characterLength; i++) {
+        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
+      }
+    } else if (isUpper && isNumber) {
+      var mixedCharacters = upperCharacters.concat(numericCharacters);
+      password[0] = upperCharacters[getRandomIndex(upperCharacters)];
+      password[1] = numericCharacters[getRandomIndex(numericCharacters)];
+      for (let i = 2; i < characterLength; i++) {
+        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
+      }
+    } else if (isUpper && isSpecial) {
+      var mixedCharacters = upperCharacters.concat(specialCharacters);
+      password[0] = upperCharacters[getRandomIndex(upperCharacters)];
+      password[1] = specialCharacters[getRandomIndex(specialCharacters)];
+      for (let i = 2; i < characterLength; i++) {
+        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
+      }
+    } else if (isNumber && isSpecial) {
+      var mixedCharacters = numericCharacters.concat(specialCharacters);
+      password[0] = numericCharacters[getRandomIndex(numericCharacters)];
+      password[1] = specialCharacters[getRandomIndex(specialCharacters)];
+      for (let i = 2; i < characterLength; i++) {
+        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
+      }
+    } else if (isLower) {
       for (let i = 0; i < characterLength; i++) {
         password[i] = lowerCharacters[getRandomIndex(lowerCharacters)];
+      }
+    } else if (isUpper) {
+      for (let i = 0; i < characterLength; i++) {
+        password[i] = upperCharacters[getRandomIndex(upperCharacters)];
+      }
+    } else if (isNumber) {
+      for (let i = 0; i < characterLength; i++) {
+        password[i] = numericCharacters[getRandomIndex(numericCharacters)];
+      }
+    } else if (isSpecial) {
+      for (let i = 0; i < characterLength; i++) {
+        password[i] = specialCharacters[getRandomIndex(specialCharacters)];
       }
     }
     return password.toString().replaceAll(`,`, ``);
   } else {
-    //So we can restart the funtion right away if the length of characters wasnt valid
+    //So we can restart the function right away if the length of characters wasnt valid
     var restart = function () {
       var tryAgain = window.confirm(
         `Not a valid character length, please try again!`
