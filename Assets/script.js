@@ -4,7 +4,6 @@ var generateBtn = document.querySelector("#generate");
 //All characters on the keyboard
 var allCharacters = [];
 for (let i = 32; i < 127; i++) allCharacters.push(String.fromCharCode(i));
-
 //We start by breaking down the allCharacters array into the different types of characters it holds
 
 var specialCharacters = allCharacters
@@ -30,6 +29,7 @@ function generatePassword() {
   if (!characterLength) {
     return;
   }
+
   //Password criteria
   if (characterLength >= 8 && characterLength <= 128) {
     var isLower = window.confirm(
@@ -42,121 +42,91 @@ function generatePassword() {
     var isSpecial = window.confirm(
       `Would you like to include special characters?`
     );
+
     //Sets password array to the specified length
     var password = [];
     password.length = characterLength;
+
     //Gets a random number
     function getRandomIndex(arr) {
       var randomIndex = Math.floor(Math.random() * arr.length);
       return randomIndex;
     }
-    //All possible password criteria combinations in order
-    if (isLower && isUpper && isNumber && isSpecial) {
-      password[0] = lowerCharacters[getRandomIndex(lowerCharacters)];
-      password[1] = upperCharacters[getRandomIndex(upperCharacters)];
-      password[2] = numericCharacters[getRandomIndex(numericCharacters)];
-      password[3] = specialCharacters[getRandomIndex(specialCharacters)];
+
+    //Functions that take in the different character arrays, concatenates them and uses that new mixed array to pull random characters into the password array. The first indexes of the paswword array are set to follow the criterias given, while the rest are randomly pulled. This all ensures there is always atleast one character from each criteria while the rest are random.
+    var fourCriterias = function (arr1, arr2, arr3, arr4) {
+      //Here we dont concatenate the arrays since we can use the array containing all character types
+      password[0] = arr1[getRandomIndex(arr1)];
+      password[1] = arr2[getRandomIndex(arr2)];
+      password[2] = arr3[getRandomIndex(arr3)];
+      password[3] = arr4[getRandomIndex(arr4)];
       for (let i = 4; i < characterLength; i++) {
         password[i] = allCharacters[getRandomIndex(allCharacters)];
       }
+      return password;
+    };
+    var threeCriterias = function (arr1, arr2, arr3) {
+      var mixedCharacters = arr1.concat(arr2.concat(arr3));
+      password[0] = arr1[getRandomIndex(arr1)];
+      password[1] = arr2[getRandomIndex(arr2)];
+      password[2] = arr3[getRandomIndex(arr3)];
+      for (let i = 3; i < characterLength; i++) {
+        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
+      }
+      return password;
+    };
+    var twoCriterias = function (arr1, arr2) {
+      var mixedCharacters = arr1.concat(arr2);
+      password[0] = arr1[getRandomIndex(arr1)];
+      password[1] = arr2[getRandomIndex(arr2)];
+      for (let i = 2; i < characterLength; i++) {
+        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
+      }
+      return password;
+    };
+    var oneCriteria = function (arr) {
+      for (let i = 0; i < characterLength; i++) {
+        password[i] = arr[getRandomIndex(arr)];
+      }
+      return password;
+    };
+
+    //All possible password criteria combinations in order
+    if (isLower && isUpper && isNumber && isSpecial) {
+      fourCriterias(
+        lowerCharacters,
+        upperCharacters,
+        numericCharacters,
+        specialCharacters
+      );
     } else if (isUpper && isNumber && isSpecial) {
-      var mixedCharacters = upperCharacters.concat(
-        numericCharacters.concat(specialCharacters)
-      );
-      password[0] = upperCharacters[getRandomIndex(upperCharacters)];
-      password[1] = numericCharacters[getRandomIndex(numericCharacters)];
-      password[2] = specialCharacters[getRandomIndex(specialCharacters)];
-      for (let i = 3; i < characterLength; i++) {
-        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
-      }
+      threeCriterias(upperCharacters, numericCharacters, specialCharacters);
     } else if (isLower && isNumber && isSpecial) {
-      var mixedCharacters = lowerCharacters.concat(
-        numericCharacters.concat(specialCharacters)
-      );
-      password[0] = lowerCharacters[getRandomIndex(lowerCharacters)];
-      password[1] = numericCharacters[getRandomIndex(numericCharacters)];
-      password[2] = specialCharacters[getRandomIndex(specialCharacters)];
-      for (let i = 3; i < characterLength; i++) {
-        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
-      }
+      threeCriterias(lowerCharacters, numericCharacters, specialCharacters);
     } else if (isLower && isUpper && isSpecial) {
-      var mixedCharacters = lowerCharacters.concat(
-        upperCharacters.concat(specialCharacters)
-      );
-      password[0] = lowerCharacters[getRandomIndex(lowerCharacters)];
-      password[1] = upperCharacters[getRandomIndex(upperCharacters)];
-      password[2] = specialCharacters[getRandomIndex(specialCharacters)];
-      for (let i = 3; i < characterLength; i++) {
-        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
-      }
+      threeCriterias(lowerCharacters, upperCharacters, specialCharacters);
     } else if (isLower && isUpper && isNumber) {
-      var mixedCharacters = lowerCharacters.concat(
-        upperCharacters.concat(numericCharacters)
-      );
-      password[0] = lowerCharacters[getRandomIndex(lowerCharacters)];
-      password[1] = upperCharacters[getRandomIndex(upperCharacters)];
-      password[2] = numericCharacters[getRandomIndex(numericCharacters)];
-      for (let i = 3; i < characterLength; i++) {
-        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
-      }
+      threeCriterias(lowerCharacters, upperCharacters, numericCharacters);
     } else if (isLower && isUpper) {
-      var mixedCharacters = lowerCharacters.concat(upperCharacters);
-      password[0] = lowerCharacters[getRandomIndex(lowerCharacters)];
-      password[1] = upperCharacters[getRandomIndex(upperCharacters)];
-      for (let i = 2; i < characterLength; i++) {
-        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
-      }
+      twoCriterias(lowerCharacters, upperCharacters);
     } else if (isLower && isNumber) {
-      var mixedCharacters = lowerCharacters.concat(numericCharacters);
-      password[0] = lowerCharacters[getRandomIndex(lowerCharacters)];
-      password[1] = numericCharacters[getRandomIndex(numericCharacters)];
-      for (let i = 2; i < characterLength; i++) {
-        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
-      }
+      twoCriterias(lowerCharacters, numericCharacters);
     } else if (isLower && isSpecial) {
-      var mixedCharacters = lowerCharacters.concat(specialCharacters);
-      password[0] = lowerCharacters[getRandomIndex(lowerCharacters)];
-      password[1] = specialCharacters[getRandomIndex(specialCharacters)];
-      for (let i = 2; i < characterLength; i++) {
-        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
-      }
+      twoCriterias(lowerCharacters, specialCharacters);
     } else if (isUpper && isNumber) {
-      var mixedCharacters = upperCharacters.concat(numericCharacters);
-      password[0] = upperCharacters[getRandomIndex(upperCharacters)];
-      password[1] = numericCharacters[getRandomIndex(numericCharacters)];
-      for (let i = 2; i < characterLength; i++) {
-        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
-      }
+      twoCriterias(upperCharacters, numericCharacters);
     } else if (isUpper && isSpecial) {
-      var mixedCharacters = upperCharacters.concat(specialCharacters);
-      password[0] = upperCharacters[getRandomIndex(upperCharacters)];
-      password[1] = specialCharacters[getRandomIndex(specialCharacters)];
-      for (let i = 2; i < characterLength; i++) {
-        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
-      }
+      twoCriterias(upperCharacters, specialCharacters);
     } else if (isNumber && isSpecial) {
-      var mixedCharacters = numericCharacters.concat(specialCharacters);
-      password[0] = numericCharacters[getRandomIndex(numericCharacters)];
-      password[1] = specialCharacters[getRandomIndex(specialCharacters)];
-      for (let i = 2; i < characterLength; i++) {
-        password[i] = mixedCharacters[getRandomIndex(mixedCharacters)];
-      }
+      twoCriterias(numericCharacters, specialCharacters);
     } else if (isLower) {
-      for (let i = 0; i < characterLength; i++) {
-        password[i] = lowerCharacters[getRandomIndex(lowerCharacters)];
-      }
+      oneCriteria(lowerCharacters);
     } else if (isUpper) {
-      for (let i = 0; i < characterLength; i++) {
-        password[i] = upperCharacters[getRandomIndex(upperCharacters)];
-      }
+      oneCriteria(upperCharacters);
     } else if (isNumber) {
-      for (let i = 0; i < characterLength; i++) {
-        password[i] = numericCharacters[getRandomIndex(numericCharacters)];
-      }
+      oneCriteria(numericCharacters);
     } else if (isSpecial) {
-      for (let i = 0; i < characterLength; i++) {
-        password[i] = specialCharacters[getRandomIndex(specialCharacters)];
-      }
+      oneCriteria(specialCharacters);
     }
     console.log(password);
     //converts the passwork array into a string
