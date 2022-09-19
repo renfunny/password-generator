@@ -4,8 +4,8 @@ var generateBtn = document.querySelector("#generate");
 //All characters on the keyboard
 var allCharacters = [];
 for (let i = 32; i < 127; i++) allCharacters.push(String.fromCharCode(i));
-//We start by breaking down the allCharacters array into the different types of characters it holds
 
+//We start by breaking down the allCharacters array into the different types of characters it holds
 var specialCharacters = allCharacters
   .slice(0, 16)
   .concat(
@@ -25,7 +25,7 @@ function generatePassword() {
     )
   );
 
-  //To cancel
+  // To cancel
   if (!characterLength) {
     return;
   }
@@ -128,6 +128,7 @@ function generatePassword() {
     } else if (isSpecial) {
       oneCriteria(specialCharacters);
     }
+    // Keeping this in for user to check if the password length is correct in the form of an array
     console.log(password);
     //converts the passwork array into a string
     return password.join("");
@@ -154,6 +155,5 @@ function writePassword() {
 
   passwordText.value = password;
 }
-writePassword();
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
